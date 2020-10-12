@@ -31,6 +31,7 @@ export interface EvilPlayerProps {
   width: number
   height: number
   ranges: RangeOpts[]
+  playOnClick?: boolean
 }
 export interface Range {
   remove(): Range

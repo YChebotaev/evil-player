@@ -17,6 +17,7 @@ export const EvilPlayer: React.FC<EvilPlayerProps> = ({
   width,
   height,
   ranges: ranges_,
+  playOnClick,
   ...props
 }) => {
   const ref = React.useRef<HTMLCanvasElement>(null)
@@ -60,25 +61,31 @@ export const EvilPlayer: React.FC<EvilPlayerProps> = ({
   React.useLayoutEffect(() => {
     const video = videoRef.current
     const ranges: Range[] = []
+    let onclick: (this: Document, ev: MouseEvent) => any
 
     for (let range_ of ranges_) {
       const range = addRange(video as HTMLVideoElement, range_)
       ranges.push(range)
     }
 
-    const onclick = () => {
-      tryPlay(video as HTMLVideoElement).then(loop.resume)
-      document.removeEventListener('click', onclick)
-    }
+    if (playOnClick) {
+      onclick = () => {
+        tryPlay(video as HTMLVideoElement).then(loop.resume)
+        document.removeEventListener('click', onclick)
+      }
 
-    document.addEventListener('click', onclick, { passive: true })
+      document.addEventListener('click', onclick, { passive: true })
+    }
 
     return () => {
       loop.pause()
       for (let range of ranges) {
         range.remove()
       }
-      document.removeEventListener('click', onclick)
+
+      if (playOnClick) {
+        document.removeEventListener('click', onclick)
+      }
     }
   }, [src, poster, width, height, rangesToHash(ranges_)])
 
