@@ -15,12 +15,27 @@ npm install --save evil-player
 ```tsx
 import React, { Component } from 'react'
 
-import MyComponent from 'evil-player'
-import 'evil-player/dist/index.css'
+import { EvilPlayer } from 'evil-player'
 
 class Example extends Component {
-  render() {
-    return <MyComponent />
+  render () {
+    return (
+      <EvilPlayer
+        src='https://firebasestorage.googleapis.com/v0/b/my-landing-924bb.appspot.com/o/offer.mp4?alt=media'
+        poster='https://picsum.photos/960/540?random=poster-1'
+        width={960}
+        height={540}
+        ranges={[
+          {
+            from: 42,
+            to: 64,
+            onEnter: () => console.log('show offer'),
+            onExit: () => console.log('hide offer'),
+            onTimeupdate: () => void null
+          }
+        ]}
+      />
+    )
   }
 }
 ```
