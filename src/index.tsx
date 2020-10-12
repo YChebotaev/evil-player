@@ -89,8 +89,22 @@ export const EvilPlayer: React.FC<EvilPlayerProps> = ({
     }
   }, [src, poster, width, height, rangesToHash(ranges_)])
 
+  const handleClick = React.useCallback<
+    (this: HTMLCanvasElement, ev: React.MouseEvent) => any
+  >(() => {
+    if (!playOnClick) {
+      tryPlay(videoRef.current as HTMLVideoElement).then(loop.resume)
+    }
+  }, [])
+
   return (
-    <canvas ref={ref} width={width} height={height} {...props}>
+    <canvas
+      ref={ref}
+      width={width}
+      height={height}
+      onClick={handleClick}
+      {...props}
+    >
       <video
         ref={videoRef}
         src={src}
